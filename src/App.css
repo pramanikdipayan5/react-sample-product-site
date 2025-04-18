@@ -36,3 +36,17 @@
     transform: rotate(360deg);
   }
 }
+
+.header-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.header-logo-img img{
+  width: 100px;
+}
+
+.user-account {
+  padding: 40px;
+}
