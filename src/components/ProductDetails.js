@@ -1,21 +1,22 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import "../Assets/ProductDetails.css";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { AuthContext } from './AuthContext';
 
 const ProductDetails = () => {
   const navigate = useNavigate();
+    const { isLoggedIn } = useContext(AuthContext);
   const { id } = useParams();
   const [ProductDetails, setProductDetails] = useState(null);
 
   useEffect(() => {
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    if (!loggedInUser) {
+    if (!isLoggedIn) {
       navigate("/login");
     }
     else {
         fetchProductDetails();
     }
-  }, []);
+  }, [isLoggedIn]);
 
   const fetchProductDetails = async () => {
     try {

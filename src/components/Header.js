@@ -1,36 +1,16 @@
-import logo from '../logo.svg';
 import Images from '../Images.jpg';
-import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useContext } from 'react';
+import { AuthContext } from "./AuthContext";
 import '../Assets/Header.css';
 
 const Header = () => {
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [userName, setUserName] = useState("");
-
-    const logoutHandler = (data) => {
-      //setDataFromChild(data);
-    };
-
+    const { isLoggedIn, loggedInUser, logout } = useContext(AuthContext);
+    const navigate = useNavigate();
     useEffect(() => {
-        const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-        const registeredUsers = JSON.parse(localStorage.getItem("users") || "[]");
-        console.log(registeredUsers);
-        if (loggedInUser) {
-            if (registeredUsers) {
-                registeredUsers.map((reguser) => {
-                    // Check if the email is already registered or not.
-                    setUserName((loggedInUser.email == reguser.userData.email) ? reguser.userData.name : 'User');
-                })
-            }
-            setIsLoggedIn(true);
-        }
-        else {
-            setIsLoggedIn(false);
-        }
-    }
-    , []);
+        const userEmail = loggedInUser?.email;
+    }, [isLoggedIn]);
 
   return (
     <div className="header-section">
@@ -43,9 +23,9 @@ const Header = () => {
       <div className="user-account">
         {isLoggedIn ? (
           <div className="user-account-loggedin">
-            <span className="user-name"> Hi {userName}</span>
+            <span className="user-name"> Hi {loggedInUser?.email}</span>
             <Link to='/dashboard'>Dashbaord</Link>
-            <Link to='/logout'>Logout</Link>
+            <button onClick={logout}>Logout</button>
           </div>
         ) : (
           <div className="user-account-loggedout">

@@ -1,19 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from './AuthContext';
 import '../Assets/Login.css';
 
 const Login = () => {
+  const { isLoggedIn, login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-    if (isLoggedIn === "true") {
+    if (isLoggedIn === true) {
       // Redirect to dashboard if the user is already logged in
       navigate("/dashboard");
     }
-  }, [navigate]);
+  }, [isLoggedIn, navigate]);
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -25,12 +26,16 @@ const Login = () => {
     let userExist = false;
     let isValidCredentials = false;
     if (reggisteredUsers) {
-      reggisteredUsers.map((reguser) => {
+      for (let i = 0; i < reggisteredUsers.length; i++) {
         // Check if the email is already registered or not.
-        userExist = (email == reguser.userData.email) ? true : false;
+        userExist = (email == reggisteredUsers[i].userData.email) ? true : false;
         // If registered, check if the password is correct or not.
-        isValidCredentials = userExist && (password == reguser.userData.password) ? true : false;
-      })
+        isValidCredentials = userExist && (password == reggisteredUsers[i].userData.password) ? true : false;
+        if (userExist && isValidCredentials) {
+          break; // Exit the loop if user is found and credentials are valid
+        }
+
+      }
     }
     if (!userExist) {
       setErrorMessage("User not found with this email ID.");
@@ -44,9 +49,9 @@ const Login = () => {
       // Set local storage to indicate the user is logged in
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("loggedInUser", JSON.stringify({ email }));
-
+      login({ email });
       // Redirect to dashboard or perform any other action
-      window.location.href = "/dashboard";
+      navigate("/dashboard");
     }
   };
 

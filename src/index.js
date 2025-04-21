@@ -10,6 +10,7 @@ import Logout from './components/Logout';
 import Dashboard from './components/Dashboard';
 import ProductList from './components/ProductList';
 import ProductDetails from './components/ProductDetails';
+import AuthProvider from "./components/AuthContext";
 
 const appRouter = createBrowserRouter([
   {
@@ -45,7 +46,11 @@ const appRouter = createBrowserRouter([
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<RouterProvider router={appRouter} />);
+root.render(
+  <AuthProvider>
+    <RouterProvider router={appRouter} />
+  </AuthProvider>
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

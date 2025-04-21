@@ -1,26 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductCard from './ProductCard';
+import { AuthContext } from './AuthContext';
 import '../Assets/ProductList.css';
 
 const ProductList = () => {
+  const { isLoggedIn } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    if (!loggedInUser) {
+    if (!isLoggedIn) {
       navigate("/login");
     }
     else {
         fetchProductList();
     }
-  }, []);
+  }, [isLoggedIn]);
 
   const fetchProductList = async () => {
     try {
       const response = await fetch('https://fakestoreapi.com/products');
       const data = await response.json();
-      console.log(data);
       setProducts(data);
     } catch (error) {
       console.error('Error fetching product list:', error);

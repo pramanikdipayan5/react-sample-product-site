@@ -1,7 +1,20 @@
-import {useState} from "react"; 
+import {useState, useContext, useEffect} from "react";
+import { useNavigate } from 'react-router-dom';
 import '../Assets/SignUp.css'
+import { AuthContext } from "./AuthContext";
 
 const Signup = () => {
+
+    const navigate = useNavigate();
+    const { isLoggedIn } = useContext(AuthContext);
+    
+    useEffect(() => {
+        if (isLoggedIn == true) {
+        
+        // Redirect to Dashbaord page if the user is logged in.
+        navigate("/dashboard");
+        }
+    }, [isLoggedIn]);
 
     const [firstName, setFirstName] = useState(""); 
     const [lastName, setLastName] = useState(""); 
