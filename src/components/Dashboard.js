@@ -1,18 +1,22 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect, useState, useContext } from 'react';
-import { AuthContext } from './AuthContext';
+//import { useEffect, useContext } from 'react';
+import { useEffect } from 'react';
+//import { AuthContext } from './AuthContext';
+import { useSelector } from 'react-redux';
 import '../Assets/Dashboard.css';
 
 const Dashboard = () => {
     const navigate = useNavigate();
-    const { isLoggedIn } = useContext(AuthContext);
+    const userData = useSelector((store) => store.user);
+    const isLoggedIn = userData.isLoggedIn;
+    //const { isLoggedIn } = useContext(AuthContext);
 
     useEffect(() => {
-      if (isLoggedIn != true) {
+      if (isLoggedIn !== true) {
         // Redirect to login page if the user is not logged in
         navigate("/login");
       }
-    }, [isLoggedIn]);
+    }, [navigate, isLoggedIn]);
   
   return (
     <div className="dashboard-container">

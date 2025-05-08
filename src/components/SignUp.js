@@ -1,20 +1,25 @@
-import {useState, useContext, useEffect} from "react";
+//import {useState, useContext, useEffect} from "react";
+import {useState, useEffect} from "react";
 import { useNavigate } from 'react-router-dom';
 import '../Assets/SignUp.css'
-import { AuthContext } from "./AuthContext";
+//import { AuthContext } from "./AuthContext";
+import { useSelector } from "react-redux";
 
 const Signup = () => {
 
+    const userData = useSelector((store) => store.user);
+    const isLoggedIn = userData.isLoggedIn;
+
     const navigate = useNavigate();
-    const { isLoggedIn } = useContext(AuthContext);
+    //const { isLoggedIn } = useContext(AuthContext);
     
     useEffect(() => {
-        if (isLoggedIn == true) {
+        if (isLoggedIn === true) {
         
         // Redirect to Dashbaord page if the user is logged in.
         navigate("/dashboard");
         }
-    }, [isLoggedIn]);
+    }, [navigate, isLoggedIn]);
 
     const [firstName, setFirstName] = useState(""); 
     const [lastName, setLastName] = useState(""); 
@@ -49,8 +54,8 @@ const Signup = () => {
       let userExist = false;
       const reggisteredUsers = JSON.parse(localStorage.getItem("users") || "[]");
       if (reggisteredUsers) {
-        reggisteredUsers.map((reguser) => {
-            userExist = (email.value == reguser.userData.email) ? true : false
+        reggisteredUsers.forEach((reguser) => {
+            userExist = (email.value === reguser.userData.email) ? true : false
         })
       }
       if (!userExist) {

@@ -1,11 +1,15 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import "../Assets/ProductDetails.css";
-import { useEffect, useState, useContext } from 'react';
-import { AuthContext } from './AuthContext';
+//import { useEffect, useState } from 'react';
+//import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import ProductDetailsShimmer from '../Utils/ProductDetailsShimmer';
+//import { AuthContext } from './AuthContext';
 
 const ProductDetails = () => {
   const navigate = useNavigate();
-    const { isLoggedIn } = useContext(AuthContext);
+  const isLoggedIn = useSelector((store) => store.user.isLoggedIn);
   const { id } = useParams();
   const [ProductDetails, setProductDetails] = useState(null);
 
@@ -14,9 +18,9 @@ const ProductDetails = () => {
       navigate("/login");
     }
     else {
-        fetchProductDetails();
+      fetchProductDetails();
     }
-  }, [isLoggedIn]);
+  }, []);
 
   const fetchProductDetails = async () => {
     try {
@@ -28,7 +32,8 @@ const ProductDetails = () => {
     }
   }
 
-  return ProductDetails ? (
+  return ProductDetails ? 
+  (
     <div className="product-details-container">
       <Link to="/product-list" className="back-button">← Back to Product List</Link>
       <h1>{ProductDetails.title}</h1>
@@ -36,9 +41,8 @@ const ProductDetails = () => {
       <p>{ProductDetails.description}</p>
       <p>Price: ${ProductDetails.price}</p>
     </div>
-  ) : (
-    <div>Loading...</div>
-  );
+  ) : 
+  <ProductDetailsShimmer />
 }
 
 export default ProductDetails;

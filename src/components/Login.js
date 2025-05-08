@@ -1,11 +1,18 @@
-import { useEffect, useState, useContext } from 'react';
+//import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from './AuthContext';
+//import { AuthContext } from './AuthContext';
+import { useDispatch } from 'react-redux';
+import { login } from '../Utils/userSlice';
+import { useSelector } from 'react-redux';
 import '../Assets/Login.css';
 
 const Login = () => {
-  const { isLoggedIn, login } = useContext(AuthContext);
+  //const { isLoggedIn, login } = useContext(AuthContext);
+  const userData = useSelector((store) => store.user);
+  const isLoggedIn = userData.isLoggedIn;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -28,9 +35,9 @@ const Login = () => {
     if (reggisteredUsers) {
       for (let i = 0; i < reggisteredUsers.length; i++) {
         // Check if the email is already registered or not.
-        userExist = (email == reggisteredUsers[i].userData.email) ? true : false;
+        userExist = (email === reggisteredUsers[i].userData.email) ? true : false;
         // If registered, check if the password is correct or not.
-        isValidCredentials = userExist && (password == reggisteredUsers[i].userData.password) ? true : false;
+        isValidCredentials = userExist && (password === reggisteredUsers[i].userData.password) ? true : false;
         if (userExist && isValidCredentials) {
           break; // Exit the loop if user is found and credentials are valid
         }
@@ -47,9 +54,15 @@ const Login = () => {
     }
     else {
       // Set local storage to indicate the user is logged in
-      localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("loggedInUser", JSON.stringify({ email }));
-      login({ email });
+      // localStorage.setItem("isLoggedIn", "true");
+      // localStorage.setItem("loggedInUser", JSON.stringify({ email }));
+      // login({ email });
+      dispatch(
+        login({
+          email: email,
+          password: password,
+        })
+      );
       // Redirect to dashboard or perform any other action
       navigate("/dashboard");
     }

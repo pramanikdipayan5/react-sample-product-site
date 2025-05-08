@@ -1,17 +1,22 @@
-import { useEffect, useContext } from 'react';
+//import { useEffect, useContext } from 'react';
+import { useEffect } from 'react';
 import "../Assets/Logout.css";
 import { Link } from 'react-router-dom';
-import { AuthContext } from "./AuthContext";
+//import { AuthContext } from "./AuthContext";
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../Utils/userSlice';
+import { useDispatch } from 'react-redux';
 
 const Logout = () => {
 
-    const { logout } = useContext(AuthContext);
+    const dispatch = useDispatch();
+
+    //const { logout } = useContext(AuthContext);
     const navigate = useNavigate();
     useEffect(() => {
-        logout();
+        dispatch(logout());
         navigate("/login");
-    }, [logout, navigate]);
+    }, [navigate]);
 
     return (
         <div className="logout-section">

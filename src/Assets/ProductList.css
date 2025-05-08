@@ -33,14 +33,14 @@
   }
   
   .product-list {
-    display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
+    display: flex;
   }
   
   .product-list > div {
     flex: 1 1 calc(25% - 20px); /* Adjusts to fit 4 cards per row */
-    max-width: 300px;
-    min-width: 250px;
+    /* max-width: 300px;
+    min-width: 250px; */
   }

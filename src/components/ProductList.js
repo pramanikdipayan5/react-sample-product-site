@@ -1,11 +1,16 @@
-import { useEffect, useState, useContext } from 'react';
+//import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductCard from './ProductCard';
-import { AuthContext } from './AuthContext';
+//import { AuthContext } from './AuthContext';
 import '../Assets/ProductList.css';
+import { useSelector } from 'react-redux';
+import ProductListShimmer from '../Utils/ProductListShimer';
 
 const ProductList = () => {
-  const { isLoggedIn } = useContext(AuthContext);
+  const userData = useSelector((store) => store.user);
+  const isLoggedIn = userData.isLoggedIn;
+  //const { isLoggedIn } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
@@ -13,9 +18,9 @@ const ProductList = () => {
       navigate("/login");
     }
     else {
-        fetchProductList();
+      fetchProductList();
     }
-  }, [isLoggedIn]);
+  }, [navigate, isLoggedIn]);
 
   const fetchProductList = async () => {
     try {
@@ -31,9 +36,13 @@ const ProductList = () => {
     <div className="product-list-container">
       <h1>Product List</h1>
       <div className="product-list">
-        {products.map((product) => (
-          <div key={product.id}><ProductCard product={product} /></div>
-        ))}
+        {
+          products.length > 0 ? products.map((product) => (
+            <div key={product.id}><ProductCard product={product} /></div>
+          ))
+            :
+            <ProductListShimmer />
+        }
       </div>
     </div>
   );
